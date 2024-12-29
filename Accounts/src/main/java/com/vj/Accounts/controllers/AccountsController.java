@@ -2,6 +2,7 @@ package com.vj.Accounts.controllers;
 
 
 import com.vj.Accounts.constants.AccountsConstants;
+import com.vj.Accounts.dto.AccountsContactInfoDto;
 import com.vj.Accounts.dto.CustomerDto;
 import com.vj.Accounts.dto.ResponseDto;
 import com.vj.Accounts.services.impl.AccountsService;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,13 +19,21 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api")
-@AllArgsConstructor
 @Validated
 public class AccountsController {
     private AccountsService accountsService;
+    private Environment environment;
+    private AccountsContactInfoDto accountsContactInfoDto;
+    AccountsController(AccountsService accountsService, Environment environment, AccountsContactInfoDto accountsContactInfoDto) {
+        this.accountsService = accountsService;
+        this.environment = environment;
+        this.accountsContactInfoDto = accountsContactInfoDto;
+    }
 
     @Value("${build.version}")
     private String buildVersion;
+
+
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDto>
@@ -76,5 +86,16 @@ public class AccountsController {
     @GetMapping("/build-info")
     public ResponseEntity<String> getBuildInfo() {
         return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+    }
+
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("MAVEN_HOME"));
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(accountsContactInfoDto);
     }
 }
