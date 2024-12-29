@@ -8,7 +8,6 @@ import com.vj.Accounts.dto.ResponseDto;
 import com.vj.Accounts.services.impl.AccountsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
